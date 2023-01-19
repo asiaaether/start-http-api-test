@@ -3,7 +3,8 @@ import config from "../framework/config";
 import user from "../framework/services";
 
 const USER = config.newUser
-const userID = ''
+let userID = ''
+let token = ''
 
 describe('user', () => {
   describe('POST /Account/v1/Authorized', () => {
@@ -11,7 +12,7 @@ describe('user', () => {
     it.only('Создание юзера', async () => {
 
       const res = await user.createUser(USER)
-      const userID = res.body.userID
+      userID = res.body.userID
       console.log(res.body)
       console.log(userID)
 
@@ -22,7 +23,7 @@ describe('user', () => {
     it.only('Получение токена', async () => {
     
       const res = await user.getToken(USER)
-
+      token = res.body.token
       console.log(res.body.token)
 
       expect(res.status).toEqual(200)
@@ -43,11 +44,9 @@ describe('user', () => {
 
       const res = await user.getUserInfo(userID)
       console.log(res)
-
       expect(res.status).toEqual(200);
     })
     
-
   //   test('Авторизация должна возвращать статус с кодом ошибки если логин неверный', async () => {
   //     const res = await supertest('https://try.vikunja.io')
   //         .post('/api/v1/login')
