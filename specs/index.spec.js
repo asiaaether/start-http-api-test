@@ -1,44 +1,76 @@
 import supertest from "supertest";
+import config from "../framework/config";
+import user from "../framework/services";
+
+const USER = config.newUser
+const userID = ''
 
 describe('user', () => {
-  describe('POST /api/v1/login', () => {
-    test('Метод должен существовать', async () => {
-      const res = await supertest('https://try.vikunja.io')
-          .post('/api/v1/login')
-          .send({})
+  describe('POST /Account/v1/Authorized', () => {
 
-      expect(res.status).not.toEqual(404);
+    it.only('Создание юзера', async () => {
+
+      const res = await user.createUser(USER)
+      const userID = res.body.userID
+      console.log(res.body)
+      console.log(userID)
+
+      expect(res.status).toEqual(201);
+
     })
 
-    test('Авторизация должна проходить успешно с правильным логином и паролем', async () => {
-      const res = await supertest('https://try.vikunja.io')
-          .post('/api/v1/login')
-          .set('Accept', 'application/json')
-          .send({username: 'demo', password: 'demo'})
+    it.only('Получение токена', async () => {
+    
+      const res = await user.getToken(USER)
+
+      console.log(res.body.token)
+
+      expect(res.status).toEqual(200)
+
+    })
+
+    it.only('Авторизация должна проходить успешно с правильным логином и паролем', async () => {
+
+      const res = await user.login(USER)
+      console.log(res.body)
 
       expect(res.status).toEqual(200);
-      expect(typeof res.body.token).toEqual('string')
+      expect(res.body).toEqual(true)
     })
 
-    test('Авторизация должна возвращать статус с кодом ошибки если логин неверный', async () => {
-      const res = await supertest('https://try.vikunja.io')
-          .post('/api/v1/login')
-          .set('Accept', 'application/json')
-          .send({username: 'demo4', password: 'demo'})
 
-      expect(res.status).toEqual(412);
-      expect(res.body.code).toEqual(1011)
+    it.only('Получение информации о юзере', async () => {
+
+      const res = await user.getUserInfo(userID)
+      console.log(res)
+
+      expect(res.status).toEqual(200);
     })
+    
 
-    test('Авторизация должна возвращать статус с кодом ошибки если пароль неверный', async () => {
-      const res = await supertest('https://try.vikunja.io')
-          .post('/api/v1/login')
-          .set('Accept', 'application/json')
-          .send({username: 'demo', password: 'demo3'})
+  //   test('Авторизация должна возвращать статус с кодом ошибки если логин неверный', async () => {
+  //     const res = await supertest('https://try.vikunja.io')
+  //         .post('/api/v1/login')
+  //         .set('Accept', 'application/json')
+  //         .send({username: 'demo4', password: 'demo'})
+
+  //     expect(res.status).toEqual(412);
+  //     expect(res.body.code).toEqual(1011)
+  //   })
+
+  //   test('Авторизация должна возвращать статус с кодом ошибки если пароль неверный', async () => {
+  //     const res = await supertest('https://try.vikunja.io')
+  //         .post('/api/v1/login')
+  //         .set('Accept', 'application/json')
+  //         .send({username: 'demo', password: 'demo3'})
 
 
-      expect(res.status).toEqual(412);
-      expect(res.body.code).toEqual(1011)
-    })
+  //     expect(res.status).toEqual(412);
+  //     expect(res.body.code).toEqual(1011)
+  //   })
   })
 })
+
+
+
+// 1 логин - генерация токена - авторизвация -получение информации- удаление
