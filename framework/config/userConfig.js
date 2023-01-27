@@ -6,7 +6,7 @@ const randomPassword = faker.internet.password(10, false,  /\S/);
 const config = {
     url: "https://bookstore.demoqa.com",
     credentials: {
-        "userName": "Aliyah1",
+        "userName": "Aliyah95",
         "password": "AwjqA1A1!d"
     },
     newUser: {
