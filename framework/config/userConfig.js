@@ -12,7 +12,16 @@ const config = {
     newUser: {
         "userName": `${randomName}`,
         "password": `${randomPassword}1!`
-    }
+    },
+
+    newBook: {
+        "userId":`${userID}`,
+        "collectionOfIsbns": [
+          {
+            "isbn": `${isbn}`
+          }
+        ]
+      }
 }
 
 export default config;

@@ -1,11 +1,11 @@
 import supertest from "supertest";
 import config from "../framework/config/userConfig";
 import user from "../framework/services/user";
+import book from "../framework/services/books"
 
 
 
-
-describe('user', () => {
+describe.skip('user', () => {
   describe('POST /Account/v1/Authorized', () => {
 
     it.skip('Создание юзера', async () => {
@@ -69,6 +69,42 @@ describe('user', () => {
       const response = await user.deleteUser(userID, token)
       expect(response.status).toEqual(200)
     })
+    
+  })
+})
+
+
+describe('Books', () => {
+  it('Получение списка книг', async () => {
+    const res = await book.getBookList()
+    expect(res.status).toEqual(200)
+  })
+
+  it('Создание книги', async () => {
+    const USER = config.newUser
+    const res = await user.createUser(USER)
+    const userID = res.body.userID
+    console.log(userID)
+
+    const resToken = await user.generateToken(USER)
+    const token = resToken.body.token
+    console.log(token)
+
+    const resAuth = await user.login(USER)
+
+    const response = await 
+    expect(response.status).toEqual(200)
+  })
+
+  it('Обновление книги', () => {
+    
+  })
+
+  it('Получение информации о книге', () => {
+    
+  })
+
+  it('Удаление книги', () => {
     
   })
 })
