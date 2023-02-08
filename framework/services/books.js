@@ -12,12 +12,22 @@ const book = {
         .send()
     },
 
-    createBook: (paload) => {
+    addBookToList: (token, userID) => {
         return supertest(url)
-        .post('/Account/v1/User')
+        .post('/BookStore/v1/Books')
         .set('Accept', 'application/json')
-        .send(paload)
-    }
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          "userId": `${userID}`,
+          "collectionOfIsbns": [
+            {
+              "isbn": "9781491904244"
+            }
+          ]
+        })
+    },
+
+   
 }
 
 export default book;

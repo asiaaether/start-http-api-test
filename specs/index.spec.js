@@ -74,26 +74,38 @@ describe.skip('user', () => {
 })
 
 
-describe('Books', () => {
+describe.skip('Books', () => {
   it('Получение списка книг', async () => {
     const res = await book.getBookList()
     expect(res.status).toEqual(200)
   })
 
-  it('Создание книги', async () => {
+  it('Добавление книги в список юзера', async () => {
     const USER = config.newUser
     const res = await user.createUser(USER)
     const userID = res.body.userID
-    console.log(userID)
+    console.log(res.body.books)
 
     const resToken = await user.generateToken(USER)
     const token = resToken.body.token
     console.log(token)
 
     const resAuth = await user.login(USER)
+    console.log(resAuth.body)
 
-    const response = await 
-    expect(response.status).toEqual(200)
+    const response = await book.addBookToList(token, userID)
+      console.log(response.body)
+      console.log(USER)
+
+        expect(response.status).toEqual(201)
+
+        const resBook = await book.getBookList()
+        console.log(resBook.body)
+        
+        const responseUser = await user.user(userID, token)
+      console.log(responseUser.body)
+
+
   })
 
   it('Обновление книги', () => {
@@ -108,6 +120,103 @@ describe('Books', () => {
     
   })
 })
+
+describe.only('Books', () => {
+
+  let USER = {}
+  let userID = ''
+  let token = ''
+  let ISBN = '9781593275846'
+
+beforeAll(async () => {
+  USER = config.newUser
+  const res = await user.createUser(USER)
+  userID = res.body.userID
+  console.log(res.body.books)
+
+  const resToken = await user.generateToken(USER)
+  token = resToken.body.token
+  //console.log(token)
+
+  const resAuth = await user.login(USER)
+  console.log(resAuth.body)
+
+})
+
+  it('Получение списка книг', async () => {
+    const res = await book.getBookList()
+    expect(res.status).toEqual(200)
+  })
+
+  it('Добавление книги в список юзера', async () => {
+    // const USER = config.newUser
+    // const res = await user.createUser(USER)
+    // const userID = res.body.userID
+    // console.log(res.body.books)
+
+    // const resToken = await user.generateToken(USER)
+    // const token = resToken.body.token
+    // console.log(token)
+
+    // const resAuth = await user.login(USER)
+    // console.log(resAuth.body)
+    
+
+    const response = await book.addBookToList(token, userID)
+      console.log(response.body)
+      console.log(USER)
+
+        expect(response.status).toEqual(201)
+
+        // const resBook = await book.getBookList()
+        // console.log(resBook.body)
+        
+        const responseUser = await user.user(userID, token)
+      console.log(responseUser.body)
+
+
+  })
+
+  it('Обновление книги', async () => {
+    const res = await supertest(config.url)
+    .put(`/BookStore/v1/Books/${ISBN}`)
+    .set('Accept', 'application/json')
+    .set('Authorization', `Bearer ${token}`)
+    .send({
+      "userId": `${userID}`,
+      "isbn": '9781449331818'
+    })
+
+    console.log(USER)
+    console.log(res.body)
+    expect(res.status).toEqual(200)
+  })
+
+  it('Получение информации о книге', async () => {
+    const res = await supertest(config.url)
+    .get(`/BookStore/v1/Book?ISBN=${ISBN}`)
+    .set('Accept', 'application/json')
+    .send()
+
+    expect(res.status).toEqual(200)
+    console.log(res.body)
+  })
+
+  it('Удаление книги', async () => {
+    const res = await supertest(config.url)
+    .del('/BookStore/v1/Book')
+    .set('Accept', 'application/json')
+    .set('Authorization', `Bearer ${token}`)
+    .send({
+      "isbn": "9781491904244",
+      "userId": `${userID}`
+    })
+
+    expect(res.status).toEqual(204)
+    
+  })
+})
+
 
 
 

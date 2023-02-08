@@ -14,14 +14,14 @@ const config = {
         "password": `${randomPassword}1!`
     },
 
-    newBook: {
-        "userId":`${userID}`,
-        "collectionOfIsbns": [
-          {
-            "isbn": `${isbn}`
-          }
-        ]
-      }
+    // newBook: {
+    //     "userId":`${userID}`,
+    //     "collectionOfIsbns": [
+    //       {
+    //         "isbn": `${isbn}`
+    //       }
+    //     ]
+    //   }
 }
 
 export default config;
