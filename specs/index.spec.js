@@ -125,6 +125,7 @@ afterAll(async () => {
 
   it('Удаление книги', async () => {
     const res = await book.deleteBook(token, userID)
+    console.log(res)
 
     expect(res.status).toEqual(204)
     
