@@ -59,7 +59,11 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v1
       with:
-        path: 'jest-html-report'        
+        path: 'jest-html-report'
+        
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v1
 
 #     - name: send telegram message on push
 #       uses: appleboy/telegram-action@master
