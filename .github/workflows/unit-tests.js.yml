@@ -1,7 +1,12 @@
 name: Unit tests
 
+# Down scope as necessary via https://docs.github.com/en/actions/security-guides/automatic-token-authentication#modifying-the-permissions-for-the-github_token
 permissions:
+  checks: write
   contents: write
+  pages: write
+  id-token: write
+  deployments: write
   
 on:
   workflow_dispatch:
@@ -47,21 +52,26 @@ jobs:
         name: coverage
         if-no-files-found: error
         path: ./coverage
+        
+    - name: Setup Pages
+      uses: actions/configure-pages@v2
 
-    - name: Deploy
-      uses: JamesIves/github-pages-deploy-action@v4
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v1
       with:
-        folder: jest-html-report
-        clean: true
-        token: ${{ secrets.TOKEN }}
+        path: 'jest-html-report'
+        
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v1
 
-    - name: send telegram message on push
-      uses: appleboy/telegram-action@master
-      with:
-        to: ${{ secrets.TELEGRAM_TO }}
-        token: ${{ secrets.TELEGRAM_TOKEN }}
-        message: |
-          ${{ github.actor }} created commit:
-          Commit message: ${{ github.event.commits[0].message }}
-          Repository: ${{ github.repository }}
-          See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
+#     - name: send telegram message on push
+#       uses: appleboy/telegram-action@master
+#       with:
+#         to: ${{ secrets.TELEGRAM_TO }}
+#         token: ${{ secrets.TELEGRAM_TOKEN }}
+#         message: |
+#           ${{ github.actor }} created commit:
+#           Commit message: ${{ github.event.commits[0].message }}
+#           Repository: ${{ github.repository }}
+#           See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}

@@ -8,7 +8,7 @@ module.exports = {
   reporters: ['default', [
     "jest-html-reporters", {
       "publicPath": "./jest-html-report",
-      "filename": "report.html"
+      "filename": "index.html"
     }
   ]],
   testRunner: 'jest-jasmine2',
